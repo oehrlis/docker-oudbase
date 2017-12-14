@@ -26,7 +26,7 @@ This docker image is based on the official Oracle Linux slim image ([oraclelinux
 The purpose of this image is provide base image for other docker images for OUD Directory, Proxy Server or OUDSM. The following docker images are based on this images or build with similar structures.
 
    * [oehrlis/docker-oud](https://github.com/oehrlis/docker-oud)
-   * [oehrlis/docker-oud](https://github.com/oehrlis/docker-oudsm)
+   * [oehrlis/docker-oudsm](https://github.com/oehrlis/docker-oudsm)
 
 ## Environment Variable and Directories
 
