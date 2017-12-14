@@ -21,6 +21,12 @@
 # get the MOS Credentials
 MOS_USER="${1#*=}"
 MOS_PASSWORD="${2#*=}"
+>&2 echo "================================================================================="
+>&2 echo "--- $0 ---------------------------------"
+>&2 echo " MOS_USER=$MOS_USER"
+>&2 echo " MOS_PASSWORD=$MOS_PASSWORD"
+>&2 echo "--- $0 ---------------------------------"
+>&2 echo "================================================================================="
 
 # Download and Package Variables
 # JAVA 1.8u152 https://updates.oracle.com/ARULink/PatchDetails/process_form?patch_num=2659589
@@ -49,6 +55,12 @@ then
     >&2 echo "================================================================================="
 fi
 
+
+>&2 echo "================================================================================="
+>&2 echo "--- .netrc file ---------------------------------"
+cat {DOCKER_SCRIPTS}/.netrc
+>&2 echo "================================================================================="
+
 echo "--- Upgrade OS and install additional Packages ---------------------------------"
 # update existing packages
 yum upgrade -y
@@ -66,7 +78,7 @@ if [ ! -e ${DOWNLOAD}/${JAVA_PKG} ]
 then
     
     echo "--- Download Server JRE 8u152 from MOS -----------------------------------------"
-    curl --netrc-file ${DOCKER_SCRIPTS}/.netrc --cookie-jar cookie-jar.txt \
+    curl --verbose --netrc-file ${DOCKER_SCRIPTS}/.netrc --cookie-jar cookie-jar.txt \
     --location-trusted ${JAVA_URL} -o ${DOWNLOAD}/${JAVA_PKG}
 else
     echo "--- Use local copy of ${DOWNLOAD}/${JAVA_PKG} --------------------------------------"
