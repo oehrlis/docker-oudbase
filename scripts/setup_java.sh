@@ -44,6 +44,10 @@ then
     if [[ ! -z "${MOS_PASSWORD}" ]]
     then
         echo "machine login.oracle.com login ${MOS_USER} password ${MOS_PASSWORD}" >${DOCKER_SCRIPTS}/.netrc
+        echo "machine updates.oracle.com login ${MOS_USER} password ${MOS_PASSWORD}" >>${DOCKER_SCRIPTS}/.netrc
+        >&2 echo "--- .netrc file ---------------------------------"
+        cat ${DOCKER_SCRIPTS}/.netrc
+        >&2 echo "-------------------------------------------------"
     else
         echo "MOS_PASSWORD is empty"
     fi
@@ -58,7 +62,7 @@ fi
 
 >&2 echo "================================================================================="
 >&2 echo "--- .netrc file ---------------------------------"
-cat {DOCKER_SCRIPTS}/.netrc
+cat ${DOCKER_SCRIPTS}/.netrc
 >&2 echo "================================================================================="
 
 echo "--- Upgrade OS and install additional Packages ---------------------------------"
