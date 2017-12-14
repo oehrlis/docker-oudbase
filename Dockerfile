@@ -64,12 +64,10 @@ ENV PATH=${PATH}:"${ORACLE_BASE}/product/${ORACLE_HOME_NAME}/oud/bin"
 COPY scripts ${DOCKER_SCRIPTS}
 COPY software ${DOWNLOAD}
 
-RUN ${DOCKER_SCRIPTS}/setup_test.sh TEST_USER=${TEST_USER} TEST_PASSWORD=${TEST_PASSWORD}
-
 # Java and OUD base environment setup via shell script to reduce layers and 
 # optimize final disk usage
-#RUN ${DOCKER_SCRIPTS}/setup_java.sh MOS_USER=${MOS_USER} MOS_PASSWORD=${MOS_PASSWORD} && \
-#    ${DOCKER_SCRIPTS}/setup_oudbase.sh
+RUN ${DOCKER_SCRIPTS}/setup_java.sh MOS_USER=${MOS_USER} MOS_PASSWORD=${MOS_PASSWORD} && \
+    ${DOCKER_SCRIPTS}/setup_oudbase.sh
 
 # Switch to user oracle, oracle software as to be installed with regular user
 USER oracle
