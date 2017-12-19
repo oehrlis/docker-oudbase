@@ -50,7 +50,7 @@ ENV ORACLE_BASE=${ORACLE_BASE:-$ORACLE_ROOT/app/oracle} \
     DOMAIN_BASE=${DOMAIN_BASE:-$ORACLE_DATA/domains}
 
 # same same but third ENV so that variable get substituted
-ENV PATH=${PATH}:"${ORACLE_BASE}/local/bin"
+ENV PATH=${PATH}:"${ORACLE_BASE}/local/bin:${DOCKER_SCRIPTS}"
 
 # copy all setup scripts to DOCKER_BIN
 COPY scripts ${DOCKER_SCRIPTS}
