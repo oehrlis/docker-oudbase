@@ -23,6 +23,21 @@
 OUDBASE_URL="https://github.com/oehrlis/oudbase/raw/master/build/oudbase_install.sh"
 OUDBASE_PKG="oudbase_install.sh"
 
+mkdir -p ${DOWNLOAD}
+chmod 777 ${DOWNLOAD}
+
+echo "--- Upgrade OS and install additional Packages ---------------------------------"
+# update existing packages
+yum upgrade -y
+
+# install basic packages 
+yum install -y unzip zip gzip tar hostname which procps-ng
+
+# remove unwanted locales, the did come in with yum upgrade....
+/usr/bin/localedef --list-archive | grep -v -i ^en | xargs /usr/bin/localedef --verbose --delete-from-archive
+mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+/usr/sbin/build-locale-archive --verbose
+
 echo "--- Setup Oracle OFA environment -----------------------------------------------"
 echo " ORACLE_ROOT=${ORACLE_ROOT}"
 echo " ORACLE_DATA=${ORACLE_DATA}"
@@ -52,6 +67,15 @@ mkdir -v -p ${ORACLE_BASE}
 mkdir -v -p ${ORACLE_BASE}/local
 mkdir -v -p ${ORACLE_BASE}/product
 mkdir -v -p ${ORACLE_DATA}
+# create instance and domain directories on volume
+mkdir -v -p ${ORACLE_DATA}
+mkdir -v -p ${ORACLE_DATA}/backup
+mkdir -v -p ${ORACLE_DATA}/domains
+mkdir -v -p ${ORACLE_DATA}/etc
+mkdir -v -p ${ORACLE_DATA}/instances
+mkdir -v -p ${ORACLE_DATA}/log
+mkdir -v -p ${ORACLE_DATA}/scripts
+
 ln -s ${ORACLE_DATA}/scripts /docker-entrypoint-initdb.d
 
 echo "--- Setup OUD base environment -------------------------------------------------"
@@ -119,5 +143,8 @@ chmod a+xr ${ORACLE_ROOT} ${ORACLE_DATA} ${DOCKER_SCRIPTS} /home/oracle/.OUD_BAS
 chown oracle:oinstall -R ${ORACLE_BASE} ${ORACLE_DATA} ${DOCKER_SCRIPTS}
 
 # clean up
+echo "--- Clean up yum cache and temporary download files ----------------------------"
+yum clean all
+rm -rf /var/cache/yum
 rm -rf ${DOWNLOAD}/*
-echo "=== Done runing $0 ==============================="
+echo "=== Done runing $0 =================================="
