@@ -27,16 +27,14 @@ mkdir -p ${DOWNLOAD}
 chmod 777 ${DOWNLOAD}
 
 echo "--- Upgrade OS and install additional Packages ---------------------------------"
+# limit locale to the different english languages
+echo "%_install_langs   en" >/etc/rpm/macros.lang
+
 # update existing packages
 yum upgrade -y
 
 # install basic packages 
 yum install -y unzip zip gzip tar hostname which procps-ng
-
-# remove unwanted locales, the did come in with yum upgrade....
-/usr/bin/localedef --list-archive | grep -v -i ^en | xargs /usr/bin/localedef --verbose --delete-from-archive
-mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
-/usr/sbin/build-locale-archive --verbose
 
 echo "--- Setup Oracle OFA environment -----------------------------------------------"
 echo " ORACLE_ROOT=${ORACLE_ROOT}"
@@ -60,21 +58,19 @@ useradd --create-home --gid oinstall --shell /bin/bash \
 
 echo "--- Create OFA directory structure"
 # create oracle directories
-mkdir -v -p ${ORACLE_ROOT}
-
-# create base directories
-mkdir -v -p ${ORACLE_BASE}
-mkdir -v -p ${ORACLE_BASE}/local
-mkdir -v -p ${ORACLE_BASE}/product
-mkdir -v -p ${ORACLE_DATA}
-# create instance and domain directories on volume
-mkdir -v -p ${ORACLE_DATA}
-mkdir -v -p ${ORACLE_DATA}/backup
-mkdir -v -p ${ORACLE_DATA}/domains
-mkdir -v -p ${ORACLE_DATA}/etc
-mkdir -v -p ${ORACLE_DATA}/instances
-mkdir -v -p ${ORACLE_DATA}/log
-mkdir -v -p ${ORACLE_DATA}/scripts
+install --owner oracle --group oinstall --mode=775 --verbose --directory \
+    ${ORACLE_ROOT} \
+    ${ORACLE_DATA} \
+    ${ORACLE_DATA}/backup \
+    ${ORACLE_DATA}/domains \
+    ${ORACLE_DATA}/etc \
+    ${ORACLE_DATA}/instances \
+    ${ORACLE_DATA}/log \
+    ${ORACLE_DATA}/scripts \
+    ${ORACLE_BASE}/etc \
+    ${ORACLE_BASE}/network/admin \
+    ${ORACLE_BASE}/local \
+    ${ORACLE_BASE}/product
 
 ln -s ${ORACLE_DATA}/scripts /docker-entrypoint-initdb.d
 
