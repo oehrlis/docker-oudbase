@@ -126,6 +126,7 @@ fi
 echo "--- Adjust permissions and remove temporary files ------------------------------"
 # make sure that oracle and root has a OUD_BASE
 mv /root/.OUD_BASE /home/oracle/.OUD_BASE
+
 # adjust user and group permissions
 chmod a+xr ${ORACLE_ROOT} ${ORACLE_DATA} ${DOCKER_SCRIPTS} /home/oracle/.OUD_BASE
 chown oracle:oinstall -R ${ORACLE_BASE} ${ORACLE_DATA} ${DOCKER_SCRIPTS}
