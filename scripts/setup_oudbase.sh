@@ -57,7 +57,7 @@ useradd --create-home --gid oinstall --shell /bin/bash \
     oracle
 
 echo "--- Create OFA directory structure"
-# create oracle directories
+# create oracle directories 
 install --owner oracle --group oinstall --mode=775 --verbose --directory \
     ${ORACLE_ROOT} \
     ${ORACLE_DATA} \
