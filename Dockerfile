@@ -7,7 +7,7 @@
 # Editor.....: 
 # Date.......: 
 # Revision...: 
-# Purpose....: Dockerfile to build OUD image
+# Purpose....: Dockerfile to build oudbase image
 # Notes......: --
 # Reference..: --
 # License....: CDDL 1.0 + GPL 2.0
@@ -35,19 +35,11 @@ ARG ORACLE_BASE
 # -------------------------------------------------------------
 ENV DOWNLOAD="/tmp/download" \
     DOCKER_SCRIPTS="/opt/docker/bin" \
-    START_SCRIPT="" \
-    CHECK_SCRIPT="" \
     ORACLE_ROOT=${ORACLE_ROOT:-/u00} \
-    ORACLE_DATA=${ORACLE_DATA:-/u01} \
-    LDAP_PORT=${LDAP_PORT:-1389} \
-    LDAPS_PORT=${LDAPS_PORT:-1636} \
-    REP_PORT=${REP_PORT:-8989} \
-    ADMIN_PORT=${ADMIN_PORT:-4444}
+    ORACLE_DATA=${ORACLE_DATA:-/u01}
 
 # Use second ENV so that variable get substituted
-ENV ORACLE_BASE=${ORACLE_BASE:-$ORACLE_ROOT/app/oracle} \
-    INSTANCE_BASE=${INSTANCE_BASE:-$ORACLE_DATA/instances} \
-    DOMAIN_BASE=${DOMAIN_BASE:-$ORACLE_DATA/domains}
+ENV ORACLE_BASE=${ORACLE_BASE:-$ORACLE_ROOT/app/oracle}
 
 # same same but third ENV so that variable get substituted
 ENV PATH=${PATH}:"${ORACLE_BASE}/local/bin:${DOCKER_SCRIPTS}"
@@ -59,9 +51,6 @@ COPY software ${DOWNLOAD}
 # OUD base environment setup via shell script to reduce layers and 
 # optimize final disk usage
 RUN ${DOCKER_SCRIPTS}/setup_oudbase.sh
-
-# Oracle data volume for OUD instance and configuration files
-VOLUME ["${ORACLE_DATA}"]
 
 # set workding directory
 WORKDIR "${ORACLE_BASE}"
