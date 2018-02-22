@@ -136,4 +136,4 @@ yum clean all
 rm -rf /var/cache/yum
 rm -rf ${DOWNLOAD}/*
 rm /tmp/oudbase_install.log
-echo "=== Done runing $0 ============================================================="
+echo "=== Done runing $0 ==============================="
